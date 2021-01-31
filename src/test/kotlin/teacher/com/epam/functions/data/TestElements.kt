@@ -1,4 +1,4 @@
-package teacher.com.epam.functions
+package teacher.com.epam.functions.data
 
 import com.epam.functions.JsonArray
 import com.epam.functions.JsonObjectBuilder
@@ -19,10 +19,18 @@ internal sealed class TestElement {
 
 internal data class StringElement(
     override val field: String,
-    val value: String
+    val value: String?
 ) : TestElement() {
     override fun JsonObjectBuilder.applyToBuilder() = field by value
-    override val gsonElement = GsonPrimitive(value)
+    override val gsonElement: GsonElement = value?.let(::GsonPrimitive) ?: GsonNull.INSTANCE
+}
+
+internal data class CharElement(
+    override val field: String,
+    val value: Char?
+) : TestElement() {
+    override fun JsonObjectBuilder.applyToBuilder() = field by value
+    override val gsonElement: GsonElement = value?.let(::GsonPrimitive) ?: GsonNull.INSTANCE
 }
 
 internal data class NullElement(
@@ -34,21 +42,21 @@ internal data class NullElement(
 
 internal data class BooleanElement(
     override val field: String,
-    val value: Boolean
+    val value: Boolean?
 ) : TestElement() {
     override fun JsonObjectBuilder.applyToBuilder() = field by value
-    override val gsonElement = GsonPrimitive(value)
+    override val gsonElement: GsonElement = value?.let(::GsonPrimitive) ?: GsonNull.INSTANCE
 }
 
 internal data class NumberElement(
     override val field: String,
-    val value: Number
+    val value: Number?
 ) : TestElement() {
     override fun JsonObjectBuilder.applyToBuilder() = field by value
-    override val gsonElement =
+    override val gsonElement: GsonElement =
         // We want NaN and both infinities to be represented as strings in a final json
-        if (value.shouldWrapAsDouble() || value.shouldWrapAsFloat()) GsonPrimitive(value.toString())
-        else GsonPrimitive(value)
+        if (value?.shouldWrapAsDouble() == true || value?.shouldWrapAsFloat() == true) GsonPrimitive(value.toString())
+        else value?.let(::GsonPrimitive) ?: GsonNull.INSTANCE
 }
 
 internal data class ArrayElement(

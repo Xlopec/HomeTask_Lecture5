@@ -142,7 +142,10 @@ class JsonPrimitive private constructor(
     }
 
     override fun toJsonString(): String = jsonValue
-    override fun toPrettyJsonString(level: Int, indent: Int): String = toJsonString()
+    override fun toPrettyJsonString(
+        level: Int,
+        indent: Int
+    ): String = toJsonString()
 }
 
 class JsonObject private constructor(

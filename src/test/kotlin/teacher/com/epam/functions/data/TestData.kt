@@ -5,7 +5,6 @@ package teacher.com.epam.functions.data
 import com.epam.functions.arr
 import com.epam.functions.obj
 import com.google.gson.JsonArray
-import teacher.com.epam.functions.*
 
 internal fun testNullData(): List<NullElement> =
     listOf(NullElement("null_field"))
@@ -14,9 +13,13 @@ internal fun testStringData(): List<TestElement> =
     listOf(
         StringElement("string_field", "string"),
         StringElement("empty_string_field", ""),
+        StringElement("null_string_field", null),
+        CharElement("char_field", 'a'),
+        CharElement("null_char_field", null),
     )
 
 internal fun testIntegralNumbersData() = listOf(
+    NumberElement("null_number_field", null),
     // int
     NumberElement("some_int_field", 10),
     NumberElement("max_int_field", Int.MAX_VALUE),
@@ -57,6 +60,7 @@ internal fun testDoubleData() = listOf(
 internal fun testBooleanData(): List<BooleanElement> = listOf(
     BooleanElement("true_field", true),
     BooleanElement("false_field", false),
+    BooleanElement("null_boolean_field", null),
 )
 
 @Suppress("CAST_NEVER_SUCCEEDS")
