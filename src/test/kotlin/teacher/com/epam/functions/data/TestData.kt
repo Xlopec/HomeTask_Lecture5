@@ -79,6 +79,10 @@ internal fun testArrayData(): List<ArrayElement> {
         false,
         testAny,
         obj { },
+        obj {
+            "array_property" by arr[null, "ghijk", testAny]
+            "obj_property" by obj {}
+        },
         JsonObject(testStringData),
         arr[emptyList()],
         arr[null, "ghijk", 'b', 3, 4.0, 5f, false, true, testAny]
@@ -94,7 +98,15 @@ internal fun testArrayData(): List<ArrayElement> {
         add(true)
         add(false)
         add(testAny.toString())
-        add(com.google.gson.JsonObject())
+        add(GsonObject())
+        add(GsonObject {
+            add("array_property", GsonArray {
+                add(null as? String)
+                add("ghijk")
+                add(testAny.toString())
+            })
+            add("obj_property", GsonObject())
+        })
         add(GsonObject(testStringData))
         add(JsonArray())
         add(GsonArray {
@@ -124,6 +136,11 @@ internal fun GsonObject(
     elements: Iterable<TestElement>
 ) = com.google.gson.JsonObject()
     .apply { elements.forEach { element -> add(element.field, element.gsonElement) } }
+
+internal fun GsonObject(
+    block: com.google.gson.JsonObject.() -> Unit = {}
+) = com.google.gson.JsonObject()
+    .apply(block)
 
 internal fun GsonArray(
     block: JsonArray.() -> Unit
